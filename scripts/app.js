@@ -1,38 +1,30 @@
 /**
  * scripts/app.js
- * Application bootstrap and primary event handling
  */
 
-import { state, setRecords, addRecord, updateRecord, deleteRecord, toggleSort, getSortedRecords } from './state.js';
+import { state, setRecords, addRecord, updateRecord, deleteRecord, getSortedRecords } from './state.js';
 import { loadRecords, saveRecords, loadPreferences, savePreferences, exportToJSON, validateImportedJSON } from './storage.js';
 import { compileRegex, filterRecordsByRegex } from './search.js';
-import { validateField, validateRecord } from './validators.js';
+import { validateRecord } from './validators.js';
 import { renderRecordsTable, renderDashboardStats, announceLive } from './ui.js';
 
 async function init() {
-  // Load seed data if storage is empty
   let initialData = [];
   try {
     const res = await fetch('seed.json');
     initialData = await res.json();
   } catch (err) {
-    console.warn('Seed file could not be fetched:', err);
+    console.warn('Seed data could not be fetched:', err);
   }
 
   const loaded = loadRecords(initialData);
   setRecords(loaded);
 
   const { cap, currency } = loadPreferences();
-  state.monthlyCap = cap;
-  state.currentCurrency = currency;
+  state.monthlyCap = cap || 50000;
+  state.currentCurrency = currency || 'RWF';
 
-  // Sync settings inputs
-  const capInput = document.getElementById('settings-cap');
-  const currencySelect = document.getElementById('currency-select');
-  if (capInput) capInput.value = state.monthlyCap;
-  if (currencySelect) currencySelect.value = state.currentCurrency;
-
-  setupNavigation();
+  setupSidebarNav();
   setupForm();
   setupSearchAndSort();
   setupSettings();
@@ -48,7 +40,7 @@ function refreshUI() {
       regexStatus.textContent = `Regex Error: ${error}`;
       regexStatus.className = 'regex-feedback error';
     } else {
-      regexStatus.textContent = state.searchPattern ? 'Pattern valid' : '';
+      regexStatus.textContent = state.searchPattern ? 'Pattern active' : '';
       regexStatus.className = 'regex-feedback';
     }
   }
@@ -60,12 +52,20 @@ function refreshUI() {
   renderDashboardStats(state.records, state.monthlyCap, state.currentCurrency);
 }
 
-function setupNavigation() {
-  const navButtons = document.querySelectorAll('.nav-btn');
+function setupSidebarNav() {
+  const navButtons = document.querySelectorAll('.sidebar-nav .nav-btn');
   navButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       navButtons.forEach(b => b.classList.remove('active'));
       e.currentTarget.classList.add('active');
+
+      const targetView = e.currentTarget.dataset.view;
+      document.querySelectorAll('.view-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+
+      const activePanel = document.getElementById(`view-${targetView}`);
+      if (activePanel) activePanel.classList.add('active');
     });
   });
 }
@@ -92,9 +92,9 @@ function setupForm() {
 
     const { isValid, errors } = validateRecord(candidate);
 
-    // Clear previous inline errors
     ['desc-error', 'amount-error', 'category-error', 'date-error'].forEach(id => {
-      document.getElementById(id).textContent = '';
+      const el = document.getElementById(id);
+      if (el) el.textContent = '';
     });
 
     if (!isValid) {
@@ -102,14 +102,13 @@ function setupForm() {
       if (errors.amount) document.getElementById('amount-error').textContent = errors.amount;
       if (errors.category) document.getElementById('category-error').textContent = errors.category;
       if (errors.date) document.getElementById('date-error').textContent = errors.date;
-      announceLive('Form submission contains validation errors.', true);
       return;
     }
 
     if (state.editingId) {
       updateRecord(state.editingId, candidate);
-      announceLive(`Transaction updated successfully.`);
       state.editingId = null;
+      announceLive('Expense updated.');
     } else {
       const newRecord = {
         id: `rec_${Date.now()}`,
@@ -118,13 +117,16 @@ function setupForm() {
         updatedAt: new Date().toISOString()
       };
       addRecord(newRecord);
-      announceLive(`Transaction added successfully.`);
+      announceLive('Expense added.');
     }
 
     saveRecords(state.records);
     form.reset();
     idInput.value = '';
-    document.getElementById('form-submit-btn').textContent = 'Save Transaction';
+    document.getElementById('form-submit-btn').textContent = 'Save Expense';
+    
+    // Switch view back to history list
+    document.querySelector('[data-view="records"]').click();
     refreshUI();
   });
 
@@ -132,14 +134,15 @@ function setupForm() {
     form.reset();
     state.editingId = null;
     document.getElementById('record-id').value = '';
-    document.getElementById('form-submit-btn').textContent = 'Save Transaction';
+    document.getElementById('form-submit-btn').textContent = 'Save Expense';
+    document.querySelector('[data-view="records"]').click();
   });
 
-  // Table row actions (Edit / Delete) via event delegation
+  // Table Edit/Delete clicks
   const tbody = document.getElementById('records-table-body');
   tbody.addEventListener('click', (e) => {
-    const editBtn = e.target.closest('.btn-edit');
-    const deleteBtn = e.target.closest('.btn-delete');
+    const editBtn = e.target.closest('.btn-opt-edit');
+    const deleteBtn = e.target.closest('.btn-opt-delete');
 
     if (editBtn) {
       const id = editBtn.dataset.id;
@@ -151,18 +154,18 @@ function setupForm() {
         document.getElementById('form-amount').value = rec.amount;
         document.getElementById('form-category').value = rec.category;
         document.getElementById('form-date').value = rec.date;
-        document.getElementById('form-submit-btn').textContent = 'Update Transaction';
-        window.location.hash = '#add-record';
+        document.getElementById('form-submit-btn').textContent = 'Update Expense';
+        document.querySelector('[data-view="add-record"]').click();
       }
     }
 
     if (deleteBtn) {
       const id = deleteBtn.dataset.id;
-      if (confirm('Are you sure you want to delete this record?')) {
+      if (confirm('Are you sure you want to delete this expense?')) {
         deleteRecord(id);
         saveRecords(state.records);
         refreshUI();
-        announceLive('Transaction deleted.');
+        announceLive('Expense deleted.');
       }
     }
   });
@@ -170,10 +173,19 @@ function setupForm() {
 
 function setupSearchAndSort() {
   const searchInput = document.getElementById('search-input');
+  const resetBtn = document.getElementById('btn-reset-search');
   const caseToggle = document.getElementById('case-sensitive-toggle');
+  const sortFieldSelect = document.getElementById('sort-field-select');
+  const sortDirSelect = document.getElementById('sort-dir-select');
 
   searchInput.addEventListener('input', (e) => {
     state.searchPattern = e.target.value;
+    refreshUI();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    state.searchPattern = '';
     refreshUI();
   });
 
@@ -182,12 +194,14 @@ function setupSearchAndSort() {
     refreshUI();
   });
 
-  document.querySelectorAll('.sort-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const field = e.currentTarget.dataset.sort;
-      toggleSort(field);
-      refreshUI();
-    });
+  sortFieldSelect.addEventListener('change', (e) => {
+    state.sortField = e.target.value;
+    refreshUI();
+  });
+
+  sortDirSelect.addEventListener('change', (e) => {
+    state.sortDirection = e.target.value;
+    refreshUI();
   });
 }
 
@@ -199,49 +213,54 @@ function setupSettings() {
   const importInput = document.getElementById('import-json-input');
   const importStatus = document.getElementById('import-status');
 
-  capBtn.addEventListener('click', () => {
-    state.monthlyCap = parseFloat(capInput.value) || 500.00;
-    savePreferences(state.monthlyCap, state.currentCurrency);
-    refreshUI();
-    announceLive('Monthly spending cap updated.');
-  });
+  if (capBtn) {
+    capBtn.addEventListener('click', () => {
+      state.monthlyCap = parseFloat(capInput.value) || 50000;
+      savePreferences(state.monthlyCap, state.currentCurrency);
+      refreshUI();
+      announceLive('Spending cap updated.');
+    });
+  }
 
-  currencySelect.addEventListener('change', (e) => {
-    state.currentCurrency = e.target.value;
-    savePreferences(state.monthlyCap, state.currentCurrency);
-    refreshUI();
-  });
+  if (currencySelect) {
+    currencySelect.addEventListener('change', (e) => {
+      state.currentCurrency = e.target.value;
+      savePreferences(state.monthlyCap, state.currentCurrency);
+      refreshUI();
+    });
+  }
 
-  exportBtn.addEventListener('click', () => {
-    exportToJSON(state.records);
-  });
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => exportToJSON(state.records));
+  }
 
-  importInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  if (importInput) {
+    importInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const json = JSON.parse(event.target.result);
-        if (validateImportedJSON(json)) {
-          setRecords(json);
-          saveRecords(state.records);
-          refreshUI();
-          importStatus.textContent = 'Import successful!';
-          importStatus.style.color = 'var(--success)';
-        } else {
-          importStatus.textContent = 'Invalid JSON data schema.';
-          importStatus.style.color = 'var(--danger)';
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const json = JSON.parse(event.target.result);
+          if (validateImportedJSON(json)) {
+            setRecords(json);
+            saveRecords(state.records);
+            refreshUI();
+            importStatus.textContent = 'Import successful!';
+            importStatus.style.color = '#34d399';
+          } else {
+            importStatus.textContent = 'Invalid JSON structure.';
+            importStatus.style.color = '#fb7185';
+          }
+        } catch {
+          importStatus.textContent = 'Malformed JSON file.';
+          importStatus.style.color = '#fb7185';
         }
-      } catch (err) {
-        importStatus.textContent = 'Malformed JSON file.';
-        importStatus.style.color = 'var(--danger)';
-      }
-    };
-    reader.readAsText(file);
-  });
+      };
+      reader.readAsText(file);
+    });
+  }
 }
 
-// Bootstrap
 window.addEventListener('DOMContentLoaded', init);

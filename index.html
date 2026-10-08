@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Pocket Finance Tracker</title>
+  <title>Student Pocket Money Tracker</title>
   <link rel="stylesheet" href="styles/main.css">
   <script type="module" src="scripts/app.js" defer></script>
 </head>
@@ -11,68 +11,210 @@
   <!-- Accessible Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Header & Primary Nav -->
-  <header class="app-header">
-    <div class="header-inner container">
-      <h1 class="logo">FinTrack<span>Edu</span></h1>
-      <nav aria-label="Main Navigation">
-        <ul class="nav-links">
-          <li><a href="#dashboard" class="nav-btn active">Dashboard</a></li>
-          <li><a href="#records" class="nav-btn">Transactions</a></li>
-          <li><a href="#add-record" class="nav-btn">Add New</a></li>
-          <li><a href="#settings" class="nav-btn">Settings</a></li>
-          <li><a href="#about" class="nav-btn">About</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Screen Reader Live Notification Regions -->
+  <!-- ARIA Live Regions for Announcements -->
   <div id="live-region-status" class="sr-only" role="status" aria-live="polite"></div>
   <div id="live-region-alert" class="sr-only" role="alert" aria-live="assertive"></div>
 
-  <!-- Main Landmark -->
-  <main id="main-content" class="container">
-    
-    <!-- Section 1: Dashboard / Stats -->
-    <section id="dashboard" class="view-panel" aria-labelledby="heading-dashboard">
-      <h2 id="heading-dashboard">Financial Overview</h2>
+  <div class="app-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <h1 class="logo">FinTrack<span>Edu</span></h1>
+        <nav class="sidebar-nav" aria-label="Main Navigation">
+          <ul>
+            <li><button type="button" class="nav-btn" data-view="dashboard">My Dashboard</button></li>
+            <li><button type="button" class="nav-btn active" data-view="records">History List</button></li>
+            <li><button type="button" class="nav-btn" data-view="add-record">Add Expense</button></li>
+            <li><button type="button" class="nav-btn" data-view="settings">App Settings</button></li>
+            <li><button type="button" class="nav-btn" data-view="about">About Project</button></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Quick Summary Stats on Sidebar -->
+      <div class="sidebar-stats">
+        <div class="side-stat-box">
+          <span class="side-stat-label">THINGS BOUGHT</span>
+          <span id="stat-total-records" class="side-stat-val">0</span>
+        </div>
+        <div class="side-stat-box">
+          <span class="side-stat-label">TOTAL SPENT (<span class="currency-label">FRW</span>)</span>
+          <span id="stat-total-amount" class="side-stat-val">0</span>
+        </div>
+        <div class="side-stat-box">
+          <span class="side-stat-label">BIGGEST COST</span>
+          <span id="stat-top-category" class="side-stat-val">None</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT -->
+    <main id="main-content" class="main-content">
       
-      <div class="stats-grid">
-        <div class="stat-card">
-          <p class="stat-label">Total Transactions</p>
-          <p id="stat-total-records" class="stat-value">0</p>
+      <!-- VIEW 1: RECORDS / HISTORY LIST (DEFAULT ACTIVE) -->
+      <section id="view-records" class="view-panel active">
+        <!-- Top Search Bar -->
+        <div class="search-row">
+          <div class="search-input-wrapper">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Type words here to search items..." 
+              aria-label="Search items"
+            >
+          </div>
+          <button type="button" id="btn-reset-search" class="btn btn-reset">Reset</button>
         </div>
-        <div class="stat-card">
-          <p class="stat-label">Total Spent (<span class="currency-label">USD</span>)</p>
-          <p id="stat-total-amount" class="stat-value">$0.00</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Top Category</p>
-          <p id="stat-top-category" class="stat-value">None</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Monthly Spending Cap</p>
-          <p id="stat-cap-status" class="stat-value">$0.00 / $500.00</p>
-        </div>
-      </div>
 
-      <!-- 7-Day Trend Chart -->
-      <div class="chart-wrapper">
-        <h3>Last 7 Days Trend</h3>
-        <div id="trend-chart" class="trend-chart-bars" role="img" aria-label="Bar chart showing spending over the last 7 days">
-          <!-- Dynamic bars will be rendered here -->
+        <div class="search-options-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="case-sensitive-toggle"> Case sensitive regex
+          </label>
+          <span id="regex-status" class="regex-feedback" aria-live="polite"></span>
         </div>
-      </div>
-    </section>
 
-    <!-- Section 2: Records Table & Live Search -->
-    <section id="records" class="view-panel" aria-labelledby="heading-records">
-      <div class="section-header">
-        <h2 id="heading-records">Transaction History</h2>
-        <div class="search-controls">
-          <label for="search-input" class="sr-only">Search transactions with regular expressions</label>
-          <input 
-            type="text" 
-            id="search-input" 
-            placeholder="Regex search e.g. (coffee|tea) or \.\d{
+        <!-- Sort Controls Row -->
+        <div class="sort-controls-row">
+          <div class="sort-control-group">
+            <label for="sort-field-select">SORT ITEMS BY</label>
+            <select id="sort-field-select">
+              <option value="date">Date</option>
+              <option value="description">Item Description</option>
+              <option value="amount">Price / Cost</option>
+              <option value="category">Category</option>
+            </select>
+          </div>
+
+          <div class="sort-control-group">
+            <label for="sort-dir-select">ORDER DIRECTION</label>
+            <select id="sort-dir-select">
+              <option value="desc">Newest First / High to Low</option>
+              <option value="asc">Oldest First / Low to High</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-container">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th scope="col">DATE BOUGHT</th>
+                <th scope="col">ITEM DESCRIPTION</th>
+                <th scope="col">CATEGORY</th>
+                <th scope="col">PRICE / COST (<span class="currency-label">FRW</span>)</th>
+                <th scope="col">OPTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="records-table-body">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 2: MY DASHBOARD -->
+      <section id="view-dashboard" class="view-panel">
+        <h2>Dashboard & Spending Limit</h2>
+        <div class="dashboard-cards">
+          <div class="card">
+            <h3>Monthly Cap Status</h3>
+            <p id="stat-cap-status" class="stat-highlight">0 / 50,000 FRW</p>
+          </div>
+          <div class="card">
+            <h3>Trend Overview</h3>
+            <div id="trend-chart" class="trend-chart-bars" role="img" aria-label="7 day spending trend"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: ADD / EDIT EXPENSE -->
+      <section id="view-add-record" class="view-panel">
+        <h2 id="form-heading">Add Expense</h2>
+        <form id="record-form" class="transaction-form" novalidate>
+          <input type="hidden" id="record-id">
+
+          <div class="form-group">
+            <label for="form-desc">Item Description</label>
+            <input type="text" id="form-desc" name="description" placeholder="e.g. campus meal" required>
+            <small id="desc-error" class="field-error"></small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="form-amount">Price / Cost (<span class="currency-label">FRW</span>)</label>
+              <input type="text" id="form-amount" name="amount" placeholder="e.g. 2000" required>
+              <small id="amount-error" class="field-error"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="form-category">Category</label>
+              <input type="text" id="form-category" name="category" placeholder="Housing, Food, Transport..." required>
+              <small id="category-error" class="field-error"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="form-date">Date Bought</label>
+              <input type="date" id="form-date" name="date" required>
+              <small id="date-error" class="field-error"></small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="form-submit-btn" class="btn btn-save">Save Expense</button>
+            <button type="button" id="form-cancel-btn" class="btn btn-cancel">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- VIEW 4: APP SETTINGS -->
+      <section id="view-settings" class="view-panel">
+        <h2>App Settings</h2>
+        <div class="settings-grid">
+          <div class="card">
+            <h3>Monthly Budget Limit</h3>
+            <div class="form-group">
+              <label for="settings-cap">Cap Amount (<span class="currency-label">FRW</span>)</label>
+              <input type="number" id="settings-cap" min="0" step="1000" value="50000">
+              <button type="button" id="btn-save-cap" class="btn btn-save" style="margin-top: 8px;">Update Limit</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Currency Selection</h3>
+            <div class="form-group">
+              <label for="currency-select">Active Currency</label>
+              <select id="currency-select">
+                <option value="RWF" selected>RWF / FRW (Base - FRW)</option>
+                <option value="USD">USD (1 USD = 1,400 FRW)</option>
+                <option value="EUR">EUR (1 EUR = 1,520 FRW)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Backup & Restore</h3>
+            <div class="btn-group">
+              <button type="button" id="btn-export-json" class="btn btn-save">Export JSON</button>
+              <label for="import-json-input" class="btn btn-cancel file-upload-label">Import JSON</label>
+              <input type="file" id="import-json-input" accept=".json" class="sr-only">
+            </div>
+            <small id="import-status" class="field-error"></small>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: ABOUT PROJECT -->
+      <section id="view-about" class="view-panel">
+        <h2>About Project</h2>
+        <p>This Student Pocket Money Tracker helps university students manage day-to-day spending, monitor spending limits, and search through entries with regular expressions.</p>
+        <div class="about-card" style="margin-top: 1rem;">
+          <p><strong>GitHub:</strong> <a href="https://github.com/akeza4-coder" target="_blank" rel="noopener noreferrer">github.com/akeza4-coder</a></p>
+          <p><strong>Stack:</strong> Vanilla HTML, CSS, JavaScript (ES Modules)</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</body>
+</html>
