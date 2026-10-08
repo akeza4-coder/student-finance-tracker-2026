@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Pocket Finance Tracker</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script type="module" src="scripts/app.js" defer></script>
+</head>
+<body>
+  <!-- Accessible Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header & Primary Nav -->
+  <header class="app-header">
+    <div class="header-inner container">
+      <h1 class="logo">FinTrack<span>Edu</span></h1>
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#dashboard" class="nav-btn active">Dashboard</a></li>
+          <li><a href="#records" class="nav-btn">Transactions</a></li>
+          <li><a href="#add-record" class="nav-btn">Add New</a></li>
+          <li><a href="#settings" class="nav-btn">Settings</a></li>
+          <li><a href="#about" class="nav-btn">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Screen Reader Live Notification Regions -->
+  <div id="live-region-status" class="sr-only" role="status" aria-live="polite"></div>
+  <div id="live-region-alert" class="sr-only" role="alert" aria-live="assertive"></div>
+
+  <!-- Main Landmark -->
+  <main id="main-content" class="container">
+    
+    <!-- Section 1: Dashboard / Stats -->
+    <section id="dashboard" class="view-panel" aria-labelledby="heading-dashboard">
+      <h2 id="heading-dashboard">Financial Overview</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-label">Total Transactions</p>
+          <p id="stat-total-records" class="stat-value">0</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Total Spent (<span class="currency-label">USD</span>)</p>
+          <p id="stat-total-amount" class="stat-value">$0.00</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Top Category</p>
+          <p id="stat-top-category" class="stat-value">None</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Monthly Spending Cap</p>
+          <p id="stat-cap-status" class="stat-value">$0.00 / $500.00</p>
+        </div>
+      </div>
+
+      <!-- 7-Day Trend Chart -->
+      <div class="chart-wrapper">
+        <h3>Last 7 Days Trend</h3>
+        <div id="trend-chart" class="trend-chart-bars" role="img" aria-label="Bar chart showing spending over the last 7 days">
+          <!-- Dynamic bars will be rendered here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Records Table & Live Search -->
+    <section id="records" class="view-panel" aria-labelledby="heading-records">
+      <div class="section-header">
+        <h2 id="heading-records">Transaction History</h2>
+        <div class="search-controls">
+          <label for="search-input" class="sr-only">Search transactions with regular expressions</label>
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Regex search e.g. (coffee|tea) or \.\d{

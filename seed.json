@@ -1,0 +1,92 @@
+[
+  {
+    "id": "rec_0001",
+    "description": "Tuition semester payment",
+    "amount": 1250.00,
+    "category": "Fees",
+    "date": "2026-10-01",
+    "createdAt": "2026-10-01T08:00:00.000Z",
+    "updatedAt": "2026-10-01T08:00:00.000Z"
+  },
+  {
+    "id": "rec_0002",
+    "description": "Campus cafeteria lunch meal",
+    "amount": 12.50,
+    "category": "Food",
+    "date": "2026-10-02",
+    "createdAt": "2026-10-02T12:30:00.000Z",
+    "updatedAt": "2026-10-02T12:30:00.000Z"
+  },
+  {
+    "id": "rec_0003",
+    "description": "Algorithms and Data Structures textbook",
+    "amount": 89.99,
+    "category": "Books",
+    "date": "2026-10-03",
+    "createdAt": "2026-10-03T14:15:00.000Z",
+    "updatedAt": "2026-10-03T14:15:00.000Z"
+  },
+  {
+    "id": "rec_0004",
+    "description": "Monthly city bus pass transit",
+    "amount": 45.00,
+    "category": "Transport",
+    "date": "2026-10-04",
+    "createdAt": "2026-10-04T09:00:00.000Z",
+    "updatedAt": "2026-10-04T09:00:00.000Z"
+  },
+  {
+    "id": "rec_0005",
+    "description": "Iced coffee coffee drink",
+    "amount": 4.25,
+    "category": "Entertainment",
+    "date": "2026-10-04",
+    "createdAt": "2026-10-04T16:20:00.000Z",
+    "updatedAt": "2026-10-04T16:20:00.000Z"
+  },
+  {
+    "id": "rec_0006",
+    "description": "Notebook refill pack",
+    "amount": 0.99,
+    "category": "Books",
+    "date": "2026-10-05",
+    "createdAt": "2026-10-05T11:10:00.000Z",
+    "updatedAt": "2026-10-05T11:10:00.000Z"
+  },
+  {
+    "id": "rec_0007",
+    "description": "Weekend cinema movie ticket",
+    "amount": 15.00,
+    "category": "Entertainment",
+    "date": "2026-10-05",
+    "createdAt": "2026-10-05T19:45:00.000Z",
+    "updatedAt": "2026-10-05T19:45:00.000Z"
+  },
+  {
+    "id": "rec_0008",
+    "description": "Lab equipment safety fee",
+    "amount": 60.00,
+    "category": "Fees",
+    "date": "2026-10-06",
+    "createdAt": "2026-10-06T10:00:00.000Z",
+    "updatedAt": "2026-10-06T10:00:00.000Z"
+  },
+  {
+    "id": "rec_0009",
+    "description": "Airport shuttle express",
+    "amount": 32.50,
+    "category": "Transport",
+    "date": "2026-10-07",
+    "createdAt": "2026-10-07T07:30:00.000Z",
+    "updatedAt": "2026-10-07T07:30:00.000Z"
+  },
+  {
+    "id": "rec_0010",
+    "description": "Dorm laundry detergent token",
+    "amount": 5.00,
+    "category": "Other",
+    "date": "2026-10-08",
+    "createdAt": "2026-10-08T15:00:00.000Z",
+    "updatedAt": "2026-10-08T15:00:00.000Z"
+  }
+]
