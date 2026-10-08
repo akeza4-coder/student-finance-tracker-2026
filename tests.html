@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinTrack Unit Tests</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    h1 { margin-bottom: 1rem; }
+    .test-card {
+      background: #fff;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      border-left: 6px solid #94a3b8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .test-pass { border-left-color: #16a34a; }
+    .test-fail { border-left-color: #dc2626; color: #dc2626; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .badge-pass { background: #dcfce7; color: #166534; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <h1>Regex & Validation Unit Tests</h1>
+  <div id="test-summary">Running tests...</div>
+  <div id="test-results"></div>
+
+  <script type="module">
+    import { validateField, validateRecord } from './scripts/validators.js';
+
+    const tests = [
+      {
+        name: 'Description rejects leading whitespace',
+        fn: () => !validateField('description', '   Lunch').isValid
+      },
+      {
+        name: 'Description rejects trailing whitespace',
+        fn: () => !validateField('description', 'Lunch   ').isValid
+      },
+      {
+        name: 'Description accepts valid sentence',
+        fn: () => validateField('description', 'Lunch at cafeteria').isValid
+      },
+      {
+        name: 'Advanced Regex: Detects repeated consecutive words',
+        fn: () => !validateField('description', 'Iced coffee coffee drink').isValid
+      },
+      {
+        name: 'Amount accepts valid 2-decimal number',
+        fn: () => validateField('amount', '12.50').isValid
+      },
+      {
+        name: 'Amount accepts whole integer',
+        fn: () => validateField('amount', '45').isValid
+      },
+      {
+        name: 'Amount rejects 3 decimal places',
+        fn: () => !validateField('amount', '12.555').isValid
+      },
+      {
+        name: 'Amount rejects negative numbers',
+        fn: () => !validateField('amount', '-10.00').isValid
+      },
+      {
+        name: 'Date accepts valid ISO format',
+        fn: () => validateField('date', '2026-10-08').isValid
+      },
+      {
+        name: 'Date rejects invalid month',
+        fn: () => !validateField('date', '2026-13-01').isValid
+      },
+      {
+        name: 'Category accepts hyphenated word',
+        fn: () => validateField('category', 'Part-time').isValid
+      },
+      {
+        name: 'Category rejects special characters like @ or #',
+        fn: () => !validateField('category', 'Food#Dining').isValid
+      }
+    ];
+
+    const resultsContainer = document.getElementById('test-results');
+    let passedCount = 0;
+
+    tests.forEach((t, idx) => {
+      let passed = false;
+      try {
+        passed = t.fn();
+      } catch (e) {
+        passed = false;
+      }
+
+      if (passed) passedCount++;
+
+      const div = document.createElement('div');
+      div.className = `test-card ${passed ? 'test-pass' : 'test-fail'}`;
+      div.innerHTML = `
+        <span class="badge ${passed ? 'badge-pass' : 'badge-fail'}">${passed ? 'PASS' : 'FAIL'}</span>
+        <strong>Test #${idx + 1}:</strong> ${t.name}
+      `;
+      resultsContainer.appendChild(div);
+    });
+
+    document.getElementById('test-summary').innerHTML = `
+      <p><strong>Result:</strong> ${passedCount} / ${tests.length} tests passed.</p>
+    `;
+  </script>
+</body>
+</html>
