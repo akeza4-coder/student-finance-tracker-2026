@@ -2,168 +2,169 @@
  * scripts/app.js
  */
 
-import { state, setRecords, addRecord, updateRecord, deleteRecord, getSortedRecords } from './state.js';
-import { loadRecords, saveRecords, loadPreferences, savePreferences, exportToJSON, validateImportedJSON } from './storage.js';
-import { compileRegex, filterRecordsByRegex } from './search.js';
-import { validateRecord } from './validators.js';
-import { renderRecordsTable, renderDashboardStats, announceLive } from './ui.js';
+const categories = ['Food', 'Transport', 'Books', 'Housing', 'Entertainment', 'Fees', 'Other'];
 
-// Safe fallback records in case seed.json cannot be fetched
-const FALLBACK_SEED = [
-  { id: 'rec_0001', description: 'campus meal', amount: 2000, category: 'Food', date: '2026-10-02', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  { id: 'rec_0002', description: 'bus transport', amount: 10000, category: 'Transport', date: '2026-10-04', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  { id: 'rec_0003', description: 'notebook paper', amount: 1500, category: 'Books', date: '2026-10-05', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+const initialSeedData = [
+  { id: 'rec_1', description: 'Campus Lunch Meal', amount: 2500, category: 'Food', date: '2026-10-02' },
+  { id: 'rec_2', description: 'City bus pass transit', amount: 10000, category: 'Transport', date: '2026-10-04' },
+  { id: 'rec_3', description: 'Notebook paper refill', amount: 1500, category: 'Books', date: '2026-10-05' }
 ];
 
-async function init() {
-  let initialData = FALLBACK_SEED;
+let records = [];
+let editingId = null;
+let currentCap = 50000;
+let activeSearch = '';
 
-  try {
-    const res = await fetch('seed.json');
-    if (res.ok) {
-      initialData = await res.json();
-    }
-  } catch (err) {
-    console.warn('Using default fallback records:', err);
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Populate Category dropdown
+  const catSelect = document.getElementById('input-category');
+  if (catSelect) {
+    catSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
   }
 
-  const loaded = loadRecords(initialData);
-  setRecords(loaded.length > 0 ? loaded : FALLBACK_SEED);
+  // 2. Set default date to today
+  const dateInput = document.getElementById('input-date');
+  if (dateInput) {
+    dateInput.value = new Date().toISOString().split('T')[0];
+  }
 
-  const { cap, currency } = loadPreferences();
-  state.monthlyCap = cap || 50000;
-  state.currentCurrency = currency || 'RWF';
+  // 3. Load records from storage or initial seed
+  records = loadRecords(initialSeedData);
+  const prefs = loadPreferences();
+  currentCap = prefs.cap || 50000;
 
-  setupSidebarNav();
+  // 4. Set up Navigation Switching (Fixes the black screen!)
+  setupNavigation();
+
+  // 5. Setup Form, Search, and Render
   setupForm();
-  setupSearchAndSort();
-  setupSettings();
-  refreshUI();
-}
+  setupSearch();
+  renderAll();
+});
 
-function refreshUI() {
-  const { regex, error } = compileRegex(state.searchPattern, state.caseSensitive);
-  const regexStatus = document.getElementById('regex-status');
+function setupNavigation() {
+  const navLinks = document.querySelectorAll('.nav-links .nav-link');
+  const sections = document.querySelectorAll('.app-section');
 
-  if (regexStatus) {
-    if (error) {
-      regexStatus.textContent = `Regex Error: ${error}`;
-      regexStatus.className = 'regex-feedback error';
-    } else {
-      regexStatus.textContent = state.searchPattern ? 'Pattern active' : '';
-      regexStatus.className = 'regex-feedback';
+  function showSection(targetId) {
+    sections.forEach(sec => sec.classList.remove('active-view'));
+    navLinks.forEach(lnk => lnk.classList.remove('active'));
+
+    const activeSec = document.getElementById(targetId);
+    if (activeSec) {
+      activeSec.classList.add('active-view');
+    }
+
+    const activeLnk = document.querySelector(`.nav-links a[href="#${targetId}"]`);
+    if (activeLnk) {
+      activeLnk.classList.add('active');
     }
   }
 
-  const filtered = filterRecordsByRegex(state.records, regex);
-  const sorted = getSortedRecords(filtered);
-
-  renderRecordsTable(sorted, regex, state.currentCurrency);
-  renderDashboardStats(state.records, state.monthlyCap, state.currentCurrency);
-}
-
-function setupSidebarNav() {
-  const navButtons = document.querySelectorAll('.sidebar-nav .nav-btn');
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
       e.preventDefault();
-      navButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const targetView = btn.dataset.view;
-      document.querySelectorAll('.view-panel').forEach(panel => {
-        panel.classList.remove('active');
-      });
-
-      const activePanel = document.getElementById(`view-${targetView}`);
-      if (activePanel) {
-        activePanel.classList.add('active');
-      }
+      const targetId = link.getAttribute('href').replace('#', '');
+      showSection(targetId);
     });
   });
+
+  // Default to Dashboard view
+  showSection('dashboard');
+}
+
+function renderAll() {
+  const { regex } = compileRegex(activeSearch);
+  const filtered = filterRecordsByRegex(records, regex);
+
+  renderRecordsTable(filtered, regex);
+  renderDashboardStats(records, currentCap);
+}
+
+function setupSearch() {
+  const searchInput = document.getElementById('search-input');
+  const clearBtn = document.getElementById('clear-search-btn');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      activeSearch = e.target.value;
+      renderAll();
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      activeSearch = '';
+      renderAll();
+    });
+  }
 }
 
 function setupForm() {
-  const form = document.getElementById('record-form');
+  const form = document.getElementById('transaction-mutation-form');
   const cancelBtn = document.getElementById('form-cancel-btn');
 
-  if (!form) return;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+      const descInput = document.getElementById('input-description');
+      const amountInput = document.getElementById('input-amount');
+      const dateInput = document.getElementById('input-date');
+      const catInput = document.getElementById('input-category');
 
-    const idInput = document.getElementById('record-id');
-    const descInput = document.getElementById('form-desc');
-    const amountInput = document.getElementById('form-amount');
-    const catInput = document.getElementById('form-category');
-    const dateInput = document.getElementById('form-date');
-
-    const candidate = {
-      description: descInput.value.trim(),
-      amount: parseFloat(amountInput.value) || 0,
-      category: catInput.value.trim(),
-      date: dateInput.value
-    };
-
-    const { isValid, errors } = validateRecord(candidate);
-
-    ['desc-error', 'amount-error', 'category-error', 'date-error'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = '';
-    });
-
-    if (!isValid) {
-      if (errors.description) document.getElementById('desc-error').textContent = errors.description;
-      if (errors.amount) document.getElementById('amount-error').textContent = errors.amount;
-      if (errors.category) document.getElementById('category-error').textContent = errors.category;
-      if (errors.date) document.getElementById('date-error').textContent = errors.date;
-      return;
-    }
-
-    if (state.editingId) {
-      updateRecord(state.editingId, candidate);
-      state.editingId = null;
-      announceLive('Expense updated.');
-    } else {
-      const newRecord = {
-        id: `rec_${Date.now()}`,
-        ...candidate,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+      const candidate = {
+        description: descInput.value.trim(),
+        amount: parseFloat(amountInput.value) || 0,
+        date: dateInput.value,
+        category: catInput.value
       };
-      addRecord(newRecord);
-      announceLive('Expense added.');
-    }
 
-    saveRecords(state.records);
-    form.reset();
-    if (idInput) idInput.value = '';
-    
-    const submitBtn = document.getElementById('form-submit-btn');
-    if (submitBtn) submitBtn.textContent = 'Save Expense';
+      const val = validateRecord(candidate);
 
-    // Switch view back to history list
-    const historyBtn = document.querySelector('[data-view="records"]');
-    if (historyBtn) historyBtn.click();
+      document.getElementById('err-description').textContent = val.errors.description || '';
+      document.getElementById('err-amount').textContent = val.errors.amount || '';
+      document.getElementById('err-date').textContent = val.errors.date || '';
 
-    refreshUI();
-  });
+      if (!val.isValid) return;
+
+      if (editingId) {
+        const idx = records.findIndex(r => r.id === editingId);
+        if (idx !== -1) records[idx] = { ...records[idx], ...candidate };
+        editingId = null;
+        document.getElementById('form-submit-btn').textContent = 'Save Expense';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+      } else {
+        records.unshift({
+          id: `rec_${Date.now()}`,
+          ...candidate
+        });
+      }
+
+      saveRecords(records);
+      form.reset();
+      dateInput.value = new Date().toISOString().split('T')[0];
+
+      renderAll();
+
+      // Switch to History List so the user sees their new entry
+      document.querySelector('a[href="#records"]').click();
+    });
+  }
 
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
       form.reset();
-      state.editingId = null;
-      const idInput = document.getElementById('record-id');
-      if (idInput) idInput.value = '';
-      const submitBtn = document.getElementById('form-submit-btn');
-      if (submitBtn) submitBtn.textContent = 'Save Expense';
-      const historyBtn = document.querySelector('[data-view="records"]');
-      if (historyBtn) historyBtn.click();
+      editingId = null;
+      document.getElementById('form-submit-btn').textContent = 'Save Expense';
+      cancelBtn.style.display = 'none';
+      document.querySelector('a[href="#records"]').click();
     });
   }
 
-  // Row Edit / Delete delegation
-  const tbody = document.getElementById('records-table-body');
+  // Row Edit / Delete clicks
+  const tbody = document.getElementById('ledger-rows-target');
   if (tbody) {
     tbody.addEventListener('click', (e) => {
       const editBtn = e.target.closest('.btn-opt-edit');
@@ -171,138 +172,29 @@ function setupForm() {
 
       if (editBtn) {
         const id = editBtn.dataset.id;
-        const rec = state.records.find(r => r.id === id);
-        if (rec) {
-          state.editingId = id;
-          document.getElementById('record-id').value = rec.id;
-          document.getElementById('form-desc').value = rec.description;
-          document.getElementById('form-amount').value = rec.amount;
-          document.getElementById('form-category').value = rec.category;
-          document.getElementById('form-date').value = rec.date;
+        const item = records.find(r => r.id === id);
+        if (item) {
+          editingId = id;
+          document.getElementById('input-description').value = item.description;
+          document.getElementById('input-amount').value = item.amount;
+          document.getElementById('input-date').value = item.date;
+          document.getElementById('input-category').value = item.category;
+
           document.getElementById('form-submit-btn').textContent = 'Update Expense';
-          
-          const addViewBtn = document.querySelector('[data-view="add-record"]');
-          if (addViewBtn) addViewBtn.click();
+          if (cancelBtn) cancelBtn.style.display = 'inline-block';
+
+          document.querySelector('a[href="#form-section"]').click();
         }
       }
 
       if (deleteBtn) {
         const id = deleteBtn.dataset.id;
         if (confirm('Are you sure you want to delete this expense?')) {
-          deleteRecord(id);
-          saveRecords(state.records);
-          refreshUI();
-          announceLive('Expense deleted.');
+          records = records.filter(r => r.id !== id);
+          saveRecords(records);
+          renderAll();
         }
       }
     });
   }
 }
-
-function setupSearchAndSort() {
-  const searchInput = document.getElementById('search-input');
-  const resetBtn = document.getElementById('btn-reset-search');
-  const caseToggle = document.getElementById('case-sensitive-toggle');
-  const sortFieldSelect = document.getElementById('sort-field-select');
-  const sortDirSelect = document.getElementById('sort-dir-select');
-
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      state.searchPattern = e.target.value;
-      refreshUI();
-    });
-  }
-
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      if (searchInput) searchInput.value = '';
-      state.searchPattern = '';
-      refreshUI();
-    });
-  }
-
-  if (caseToggle) {
-    caseToggle.addEventListener('change', (e) => {
-      state.caseSensitive = e.target.checked;
-      refreshUI();
-    });
-  }
-
-  if (sortFieldSelect) {
-    sortFieldSelect.addEventListener('change', (e) => {
-      state.sortField = e.target.value;
-      refreshUI();
-    });
-  }
-
-  if (sortDirSelect) {
-    sortDirSelect.addEventListener('change', (e) => {
-      state.sortDirection = e.target.value;
-      refreshUI();
-    });
-  }
-}
-
-function setupSettings() {
-  const capBtn = document.getElementById('btn-save-cap');
-  const capInput = document.getElementById('settings-cap');
-  const currencySelect = document.getElementById('currency-select');
-  const exportBtn = document.getElementById('btn-export-json');
-  const importInput = document.getElementById('import-json-input');
-  const importStatus = document.getElementById('import-status');
-
-  if (capBtn && capInput) {
-    capBtn.addEventListener('click', () => {
-      state.monthlyCap = parseFloat(capInput.value) || 50000;
-      savePreferences(state.monthlyCap, state.currentCurrency);
-      refreshUI();
-      announceLive('Spending cap updated.');
-    });
-  }
-
-  if (currencySelect) {
-    currencySelect.addEventListener('change', (e) => {
-      state.currentCurrency = e.target.value;
-      savePreferences(state.monthlyCap, state.currentCurrency);
-      refreshUI();
-    });
-  }
-
-  if (exportBtn) {
-    exportBtn.addEventListener('click', () => exportToJSON(state.records));
-  }
-
-  if (importInput) {
-    importInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const json = JSON.parse(event.target.result);
-          if (validateImportedJSON(json)) {
-            setRecords(json);
-            saveRecords(state.records);
-            refreshUI();
-            if (importStatus) {
-              importStatus.textContent = 'Import successful!';
-              importStatus.style.color = '#34d399';
-            }
-          } else if (importStatus) {
-            importStatus.textContent = 'Invalid JSON structure.';
-            importStatus.style.color = '#fb7185';
-          }
-        } catch {
-          if (importStatus) {
-            importStatus.textContent = 'Malformed JSON file.';
-            importStatus.style.color = '#fb7185';
-          }
-        }
-      };
-      reader.readAsText(file);
-    });
-  }
-}
-
-window.addEventListener('DOMContentLoaded', init);
