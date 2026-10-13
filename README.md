@@ -6,7 +6,7 @@ An accessible, responsive vanilla web application built for university students 
 - **GitHub Pages URL:** https://akeza4-coder.github.io/student-finance-tracker-2026/
 - **Repository URL:** https://github.com/akeza4-coder/student-finance-tracker-2026
 - **Test Suite:** https://akeza4-coder.github.io/student-finance-tracker-2026/tests.html
-- **Demo Video (Unlisted):** [Add your unlisted YouTube/Loom link here]
+- **Demo Video (Unlisted):** [https://www.youtube.com/watch?v=0ZufMFVne0k]
 
 ---
 
