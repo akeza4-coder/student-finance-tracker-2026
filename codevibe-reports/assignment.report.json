@@ -1,0 +1,121 @@
+{
+  "reportVersion": "1.0",
+  "assignmentId": "assignment-1791912740731-ug7cy5m",
+  "assignmentName": "assignment",
+  "generatedAt": 1791912910465,
+  "metrics": {
+    "assignmentId": "assignment-1791912740731-ug7cy5m",
+    "authorship": {
+      "totalLines": 0,
+      "manualLines": 0,
+      "permittedAILines": 0,
+      "prohibitedAILines": 0,
+      "flaggedAILines": 0,
+      "authorshipPercentage": 0,
+      "prohibitedPercentage": 0
+    },
+    "ownership": {
+      "score": 0,
+      "filesReviewed": 0,
+      "filesUnreviewed": 0,
+      "unreviewedLines": 0,
+      "averageReviewTimeMs": 0
+    },
+    "violations": [],
+    "rawEvents": [],
+    "fileReviews": [],
+    "trackingGaps": []
+  },
+  "policy": {
+    "maxAuthorshipPercentage": 30,
+    "minOwnershipScore": 40,
+    "exemptFileGlobs": [
+      "**/README*",
+      "**/*.md",
+      "**/package.json",
+      "**/package-lock.json",
+      "**/npm-shrinkwrap.json",
+      "**/yarn.lock",
+      "**/pnpm-lock.yaml",
+      "**/poetry.lock",
+      "**/Pipfile.lock",
+      "**/Gemfile.lock",
+      "**/Cargo.lock",
+      "**/composer.lock",
+      "**/go.sum",
+      "**/.gitignore",
+      "**/LICENSE*",
+      "**/tsconfig.json",
+      "**/.eslintrc*",
+      "**/.prettierrc*",
+      "**/node_modules/**",
+      "**/bower_components/**",
+      "**/.npm/**",
+      "**/venv/**",
+      "**/.venv/**",
+      "**/env/**",
+      "**/__pycache__/**",
+      "**/.tox/**",
+      "**/.mypy_cache/**",
+      "**/.pytest_cache/**",
+      "**/.ruff_cache/**",
+      "**/site-packages/**",
+      "**/.git/**",
+      "**/.hg/**",
+      "**/.svn/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/out/**",
+      "**/coverage/**",
+      "**/.nyc_output/**",
+      "**/.next/**",
+      "**/.nuxt/**",
+      "**/target/**",
+      "**/vendor/**",
+      "**/.idea/**",
+      "**/.vs/**",
+      "**/*.pyc",
+      "**/*.pyo",
+      "**/*.min.js",
+      "**/*.bundle.js",
+      "**/*.map",
+      "**/package-lock.json",
+      "**/npm-shrinkwrap.json",
+      "**/yarn.lock",
+      "**/pnpm-lock.yaml",
+      "**/poetry.lock",
+      "**/Pipfile.lock",
+      "**/Gemfile.lock",
+      "**/Cargo.lock",
+      "**/composer.lock",
+      "**/go.sum"
+    ],
+    "prohibitedMethods": [
+      "external-file-change",
+      "git-commit-marker"
+    ],
+    "permittedMethods": [
+      "inline-completion-api"
+    ],
+    "flaggedMethods": [
+      "large-paste",
+      "change-velocity"
+    ],
+    "minLargePasteReviewTimeMs": 5000,
+    "maxTrackingGapSeconds": 1800
+  },
+  "exclusionAudit": [
+    {
+      "id": 1,
+      "timestamp": 1791912740735,
+      "globs": [],
+      "source": "assignment-activated"
+    }
+  ],
+  "studentIdentifier": "a.keza4@alustudent.com",
+  "repoHeadCommit": "840197e180044099c1a5f0c9cce6ec778995b541",
+  "integrity": {
+    "algorithm": "sha256",
+    "hash": "eb4a641c5334505697b2aca555f7023b516a8e1badbbae8c557802e3b641b0b2"
+  }
+}
