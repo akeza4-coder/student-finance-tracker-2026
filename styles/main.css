@@ -305,3 +305,14 @@ mark {
   font-size: 0.8rem;
   color: #52525b;
 }
+/* Student Budget Mnagement System */
+/* Developed by Dana Alida Keza */
+/*ALU Software Enginering Department*/
+/* Version 1.0.4 - production Release*/
+.table-scroll-container{
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+}
+.metric-row:hover{
+  background-color: rgba(255, 255, 255, 0.02);
+}

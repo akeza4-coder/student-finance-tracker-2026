@@ -1,6 +1,4 @@
-// ==========================================
 // STUDENT POCKET MONEY TRACKER - CORE ENGINE
-// ==========================================
 
 const DEFAULT_SEED = [
   { id: 'rec_1', description: 'Campus Lunch Meal', amount: 2500, category: 'Food', date: '2026-10-02' },
