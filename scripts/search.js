@@ -40,8 +40,7 @@ export function highlightText(text, regex) {
   }
 }
 
-/**
- * Filters a list of records using compiled regex across text & numeric fields
+/**filter list of records using compiled regex across text  &  numerical fields
  * @param {Array} records
  * @param {RegExp|null} regex
  * @returns {Array}

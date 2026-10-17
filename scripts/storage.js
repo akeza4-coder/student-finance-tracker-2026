@@ -25,7 +25,7 @@ export function loadRecords(fallbackSeed = []) {
 }
 
 /**
- * Persists records array to localStorage
+ * Persists records array to localstorage 
  * @param {Array} records
  */
 export function saveRecords(records) {
@@ -65,7 +65,7 @@ export function exportToJSON(records) {
 }
 
 /**
- * Validates the schema of an imported JSON array
+ * Validates the schema of an imported JSON ARRAY
  * @param {Array} data
  * @returns {boolean}
  */

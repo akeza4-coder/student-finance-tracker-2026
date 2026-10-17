@@ -1,6 +1,6 @@
-/* =========================================
-   STUDENT FINANCE TRACKER - FULL LAYOUT & DISPLAY
-   ========================================= */
+/* 
+   Student Finance tracker- Full layout & Display
+   */
 :root {
   --bg-body: #0d0d0f;
   --bg-sidebar: #09090b;
@@ -144,7 +144,7 @@ body {
   background-color: var(--bg-body);
 }
 
-/* SECTIONS DISPLAY FIX: Only active section shows */
+/* SECTION DISPLAY FIX: Only active section show */
 .app-section {
   display: none;
 }
@@ -160,7 +160,7 @@ body {
   color: #fff;
 }
 
-/* FORM CONTROLS & INPUTS - FULLY CLICKABLE */
+/* FORM CONTROL & INPUT - FULLY Clickable */
 .form-grid-layout {
   display: grid;
   grid-template-columns: 1fr;

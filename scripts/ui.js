@@ -1,5 +1,5 @@
 /**
- * scripts/ui.js
+ * script / ui.js
  */
 
 import { highlightText } from './search.js';

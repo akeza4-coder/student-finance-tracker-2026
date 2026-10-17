@@ -15,7 +15,7 @@ let searchKeyword = '';
 let sortField = 'date';
 let sortDirection = 'desc';
 
-// --- STORAGE ---
+// Storage
 function loadData() {
   try {
     const raw = localStorage.getItem('fintrack_records');
@@ -31,13 +31,13 @@ function loadData() {
 
 function saveData(data) {
   try {
-    localStorage.setItem('fintrack_records', JSON.stringify(data));
+    localStorage.setItem('fintrack_records', JSON.stringsify(data));
   } catch (e) {
     console.error('Storage save error:', e);
   }
 }
 
-// --- VALIDATION (Regex Rubric Compliant) ---
+// VALIDATION (Regix Rubric Compliant) 
 const REGEX_PATTERNS = {
   description: /^\S(?:.*\S)?$/,
   amount: /^(0|[1-9]\d*)(\.\d{1,2})?$/,
@@ -70,7 +70,7 @@ function validate(candidate) {
   return { isValid: Object.keys(errors).length === 0, errors };
 }
 
-// --- RENDER FUNCTIONS ---
+//  RENDER FUNCTIONS 
 function renderUI() {
   renderTable();
   renderStats();
@@ -90,7 +90,6 @@ function renderTable() {
         re.test(r.description) || re.test(r.category) || re.test(String(r.amount))
       );
     } catch (e) {
-      // If user is half-typing an invalid regex, fallback to plain text search
       filtered = filtered.filter(r =>
         r.description.toLowerCase().includes(searchKeyword.toLowerCase()) ||
         r.category.toLowerCase().includes(searchKeyword.toLowerCase())
@@ -218,7 +217,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // FORM SUBMIT HANDLER
+  // Form submit 
   const form = document.getElementById('transaction-mutation-form');
   if (form) {
     form.addEventListener('submit', (e) => {
@@ -238,7 +237,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const val = validate(candidate);
 
-      // Display or clear errors
+      
       const errDesc = document.getElementById('err-description');
       const errAmt = document.getElementById('err-amount');
       const errDate = document.getElementById('err-date');
@@ -248,7 +247,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (errDate) errDate.textContent = val.errors.date || '';
 
       if (!val.isValid) {
-        return; // Validation failed, do not add
+        return; //  Validation failed, don't add
       }
 
       if (editingId) {
@@ -277,7 +276,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Cancel Button
+  // cancle button
   const cancelBtn = document.getElementById('form-cancel-btn');
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
@@ -289,7 +288,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Table Edit / Delete Delegations
+  // Delete
   const tbody = document.getElementById('ledger-rows-target');
   if (tbody) {
     tbody.addEventListener('click', (e) => {
@@ -323,7 +322,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Search input & Reset
+  // search input & Reset
   const searchInput = document.getElementById('search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
@@ -358,7 +357,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Settings
+  // settings
   const saveSettingsBtn = document.getElementById('save-settings-btn');
   if (saveSettingsBtn) {
     saveSettingsBtn.addEventListener('click', () => {
@@ -371,7 +370,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Initial View
+  // Inital view
   renderUI();
   navigateTo('dashboard');
 });
