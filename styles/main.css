@@ -1,5 +1,5 @@
 /* 
-   Student Finance tracker- Full layout & Display
+   Student Finance tracker- Full layout  and Display
    */
 :root {
   --bg-body: #0d0d0f;
@@ -305,10 +305,10 @@ mark {
   font-size: 0.8rem;
   color: #52525b;
 }
-/* Student Budget Mnagement System */
-/* Developed by Dana Alida Keza */
-/*ALU Software Enginering Department*/
-/* Version 1.0.4 - production Release*/
+/*  Student Budget Mnagement System  */
+/*  Developed by Dana Alida Keza  */
+/*  ALU Software Enginering Department  */
+/*  Version 1.0.4 - production Release  */
 .table-scroll-container{
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 

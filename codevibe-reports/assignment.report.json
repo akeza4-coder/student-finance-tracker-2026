@@ -2,24 +2,24 @@
   "reportVersion": "1.0",
   "assignmentId": "assignment-1791912740731-ug7cy5m",
   "assignmentName": "assignment",
-  "generatedAt": 1792231123896,
+  "generatedAt": 1792259075750,
   "metrics": {
     "assignmentId": "assignment-1791912740731-ug7cy5m",
     "authorship": {
-      "totalLines": 72,
-      "manualLines": 58,
+      "totalLines": 84,
+      "manualLines": 69,
       "permittedAILines": 0,
-      "prohibitedAILines": 14,
+      "prohibitedAILines": 15,
       "flaggedAILines": 0,
-      "authorshipPercentage": 19.444444444444446,
-      "prohibitedPercentage": 19.444444444444446
+      "authorshipPercentage": 17.857142857142858,
+      "prohibitedPercentage": 17.857142857142858
     },
     "ownership": {
-      "score": 66.66666666666667,
-      "filesReviewed": 3,
-      "filesUnreviewed": 0,
-      "unreviewedLines": 0,
-      "averageReviewTimeMs": 367836.6666666667
+      "score": 100,
+      "filesReviewed": 2,
+      "filesUnreviewed": 1,
+      "unreviewedLines": 3,
+      "averageReviewTimeMs": 374963.5
     },
     "violations": [
       {
@@ -33,8 +33,8 @@
           "tool": "ai"
         },
         "firstDetectedAt": 1791974069344,
-        "lastDetectedAt": 1791974798404,
-        "count": 3
+        "lastDetectedAt": 1792233022471,
+        "count": 4
       },
       {
         "type": "tracking-gap",
@@ -46,8 +46,8 @@
           "durationSeconds": 124068
         },
         "firstDetectedAt": 1791973668211,
-        "lastDetectedAt": 1792230539262,
-        "count": 3
+        "lastDetectedAt": 1792258782726,
+        "count": 5
       }
     ],
     "rawEvents": [
@@ -1432,9 +1432,306 @@
         "detectionMethod": "manual-typing",
         "confidence": "high",
         "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 63,
+        "timestamp": 1792232655741,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 4,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 8936
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 64,
+        "timestamp": 1792232777150,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 18,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 9865
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 65,
+        "timestamp": 1792232779484,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 2,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 2147
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 66,
+        "timestamp": 1792232795034,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 3,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 2530
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 67,
+        "timestamp": 1792232804150,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 1,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 3077
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 68,
+        "timestamp": 1792232830273,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 3,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 2472
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 69,
+        "timestamp": 1792232838473,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 7,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 7405
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 70,
+        "timestamp": 1792232840883,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 2,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 2353
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 71,
+        "timestamp": 1792232849314,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 11,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 8366
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 72,
+        "timestamp": 1792233022471,
+        "tool": "ai",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "linesRemoved": 0,
+        "linesChanged": 1,
+        "charactersCount": 12697,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "language": "javascript",
+        "metadata": {
+          "source": "external-file-change",
+          "detectionMethod": "external-file-change",
+          "confidence": "high",
+          "isAgentMode": true,
+          "isAgentGenerated": true
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": true,
+        "source": "ai",
+        "detectionMethod": "external-file-change",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m",
+        "aiClassification": "prohibited",
+        "policyViolation": "agentic-use"
+      },
+      {
+        "id": 73,
+        "timestamp": 1792258782726,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 1,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/styles/main.css",
+        "language": "css",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 3295
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
+      },
+      {
+        "id": 74,
+        "timestamp": 1792258868881,
+        "tool": "claude-code",
+        "eventType": "code-generated",
+        "linesOfCode": 1,
+        "charactersCount": 3,
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/index.html",
+        "language": "html",
+        "metadata": {
+          "manual": true,
+          "source": "manual-typing",
+          "duration": 2501
+        },
+        "reviewQuality": null,
+        "isReviewed": false,
+        "isAgentMode": false,
+        "source": "manual",
+        "detectionMethod": "manual-typing",
+        "confidence": "high",
+        "assignmentId": "assignment-1791912740731-ug7cy5m"
       }
     ],
     "fileReviews": [
+      {
+        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
+        "date": "2026-10-17",
+        "tool": "ai",
+        "reviewQuality": "none",
+        "reviewScore": 0,
+        "isReviewed": false,
+        "linesGenerated": 1,
+        "linesChanged": 1,
+        "linesSinceReview": 1,
+        "linesAdded": 1,
+        "linesRemoved": 0,
+        "charactersCount": 12697,
+        "agentSessionId": "manual-session",
+        "isAgentGenerated": true,
+        "wasFileOpen": false,
+        "firstGeneratedAt": 1792233022471,
+        "totalReviewTime": 0,
+        "language": "javascript",
+        "modificationCount": 1,
+        "totalTimeInFocus": 0,
+        "scrollEventCount": 0,
+        "cursorMovementCount": 0,
+        "editsMade": false,
+        "reviewSessionsCount": 0,
+        "reviewedInTerminal": false
+      },
       {
         "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/styles/main.css",
         "date": "2026-10-14",
@@ -1492,33 +1789,6 @@
         "lastOpenedAt": 1791974078588,
         "reviewSessionsCount": 0,
         "reviewedInTerminal": false
-      },
-      {
-        "filePath": "c:/Users/USER/OneDrive/Documents/student-finance-tracker-2026/scripts/app.js",
-        "date": "2026-10-14",
-        "tool": "ai",
-        "reviewQuality": "none",
-        "reviewScore": 0,
-        "isReviewed": false,
-        "linesGenerated": 0,
-        "linesChanged": 2,
-        "linesSinceReview": 2,
-        "linesAdded": 0,
-        "linesRemoved": 2,
-        "charactersCount": 12769,
-        "agentSessionId": "manual-session",
-        "isAgentGenerated": true,
-        "wasFileOpen": false,
-        "firstGeneratedAt": 1791974069344,
-        "totalReviewTime": 353583,
-        "language": "javascript",
-        "modificationCount": 1,
-        "totalTimeInFocus": 0,
-        "scrollEventCount": 0,
-        "cursorMovementCount": 0,
-        "editsMade": false,
-        "reviewSessionsCount": 0,
-        "reviewedInTerminal": false
       }
     ],
     "trackingGaps": [
@@ -1536,6 +1806,16 @@
         "startTime": 1792008883857,
         "endTime": 1792230539262,
         "durationSeconds": 221655
+      },
+      {
+        "startTime": 1792230541817,
+        "endTime": 1792232655741,
+        "durationSeconds": 2113
+      },
+      {
+        "startTime": 1792233022471,
+        "endTime": 1792258782726,
+        "durationSeconds": 25760
       }
     ]
   },
@@ -1625,10 +1905,10 @@
       "source": "assignment-activated"
     }
   ],
-  "studentIdentifier": "a.keza4@student.com",
-  "repoHeadCommit": "fe5a9cb4f6371e60fbeb40ac2496c52c7d9c71be",
+  "studentIdentifier": "a.keza4@alustudent.com",
+  "repoHeadCommit": "d59f55681d52551e47c5b9fdac5ed627de9ceead",
   "integrity": {
     "algorithm": "sha256",
-    "hash": "70d213ee7bd58d43411743938c9b81a7464a1d6739b71c04870a9805d0e8ffef"
+    "hash": "00e780a4d2560610c6c21db41ad2a1649785cf527ac05b378b67ca3b1bd150c7"
   }
 }

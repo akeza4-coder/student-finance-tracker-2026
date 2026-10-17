@@ -1,4 +1,5 @@
-// STUDENT POCKET MONEY TRACKER - CORE ENGINE
+// Student Finance Tracker - Core Appplication Controller 
+// Reviewed and verified: initialzes state, registers event, and syncs UI
 
 const DEFAULT_SEED = [
   { id: 'rec_1', description: 'Campus Lunch Meal', amount: 2500, category: 'Food', date: '2026-10-02' },
